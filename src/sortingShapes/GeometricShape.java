@@ -8,10 +8,22 @@ public abstract class GeometricShape implements Comparable<GeometricShape> {
 		public abstract double getBaseArea();
 		public abstract double getVolume();
 		
+		protected double height;
+	
+		public GeometricShape(double height){
+			this.height = height;
+		}
+		
 		//Method to compare two shapes by their height
 		@Override
 		public int compareTo(GeometricShape other) {
-			return Double.compare(getHeight(), other.getHeight());
+			if (this.height > other.height) {
+				return 1;
+			} else if (this.height < other.height) {
+				return -1;
+			} else { // this.height == other.height
+				return 0;
+			}
 		}
 		
 		public static class shapeComparator implements Comparator<GeometricShape>{
@@ -30,9 +42,21 @@ public abstract class GeometricShape implements Comparable<GeometricShape> {
 				if (compareType == 'h') {
 					return shape1.compareTo(shape2);
 				} else if (compareType == 'v') {
-					return Double.compare(shape1.getVolume(), shape2.getVolume());
+					if (shape1.getVolume() > shape2.getVolume()) {
+						return 1;
+					} else if (shape1.getVolume() < shape2.getVolume()) {
+						return -1;
+					} else {
+						return 0; 
+					}
 				} else if (compareType == 'a') {
-					return Double.compare(shape1.getBaseArea(), shape2.getBaseArea());
+					if (shape1.getBaseArea() > shape2.getBaseArea()) {
+						return 1;
+					} else if (shape1.getBaseArea() < shape2.getBaseArea()) {
+						return -1;
+					} else {
+						return 0;
+					}
 				} else {
 					throw new IllegalArgumentException(compareType + " is an invalid entry");
 				}
