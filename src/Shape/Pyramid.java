@@ -1,4 +1,4 @@
-package Shape;
+package shape;
 
 import sortingShapes.GeometricShape;
 

@@ -5,13 +5,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Comparator;
 
-import Shape.Cone;
-import Shape.Cylinder;
-import Shape.OctagonalPrism;
-import Shape.PentagonalPrism;
-import Shape.Pyramid;
-import Shape.SquarePrism;
-import Shape.TriangularPrism;
+import shape.Cone;
+import shape.Cylinder;
+import shape.OctagonalPrism;
+import shape.PentagonalPrism;
+import shape.Pyramid;
+import shape.SquarePrism;
+import shape.TriangularPrism;
 
 public class Sort {
 
@@ -22,13 +22,13 @@ public class Sort {
 		char sortingAlgo = 'b'; //Default sorting algorithm (bubble)
 		
 		for (int i = 0; i < args.length; i++) {
-			String arg = args[i].toLowerCase(); //Convert to lower case in case user enters capitals
+			String arg = args[i].toLowerCase(); //Convert to lower case incase user enters capitals
 			
             if (arg.startsWith("-f")) {
-                // Extract the filename without a space after -f
-                fileName = arg.substring(2); // Extract characters after -f
+                // Extract the filename after -f
+                fileName = arg.substring(2);
             } else if (arg.startsWith("-t")) {
-                // Extract comparison type without a space after -t
+                // Extract comparison type -t
                 if (arg.length() > 2) {
                     comparisonType = arg.charAt(2);
                 } else {
@@ -36,7 +36,7 @@ public class Sort {
                     return;
                 }
             } else if (arg.startsWith("-s")) {
-                // Extract sorting algorithm without a space after -s
+                // Extract sorting algorithm -s
                 if (arg.length() > 2) {
                     sortingAlgo = arg.charAt(2);
                 } else {
@@ -57,37 +57,53 @@ public class Sort {
 
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
             
+            // Initialize numberOfShape variable to int and 0
         	int numberOfShapes = 0;
         	
         	// Read the first line from the file
             String line = br.readLine();
 
+            // Used to take the first number of the data set and initialize to numberOfShapes.
             String[] parts = line.trim().split("\\s+");
             if (parts.length > 0) {
             	try {
             		numberOfShapes = Integer.parseInt(parts[0]);
                     // Print the number of shapes
                     System.out.println("Number of shapes: " + numberOfShapes);
+                // Display error message
                 } catch (NumberFormatException e) {
                     System.err.println("Invalid number format in the input file: " + parts[0]);
                 }
+            // Display error message
             } else {
                 System.err.println("Invalid format for the first line in the input file.");
             }
             	
             // Initialize the array to hold the shapes
             GeometricShape[] shapes = new GeometricShape[numberOfShapes];
+
+            // Initialize counter to int and 1. 
+            // This variable is used to offset the array when storing data into shapes because of the first number being the amount of shapes.
         	int counter = 1;
         	
             // Process shape data for each line
             for (int i = 0; i < numberOfShapes; i++) {
                 String[] shapeData = line.split(" ");
+
+                // Storing the shape type from the data set
                 String shapeType = shapeData[counter];
+
+                // Incrementing the counter ensure the next data point is stored correctly
                 counter++;
+
+                // Storing the height from the data set
                 double height = Double.parseDouble(shapeData[counter]);
                 counter++;
+
+                // This switch is used to match the correct data with its corresponding shape 
 	            switch (shapeType) {
 	                case "Cylinder":
+                        // Storing the secondary dimension from the data set
 	                    double radiusCylinder = Double.parseDouble(shapeData[counter]);
 	                    shapes[i] = new Cylinder(height, radiusCylinder);
 	                    counter++;
@@ -123,6 +139,7 @@ public class Sort {
 	                    counter++;
 	                    break;
 	                default:
+                        // Display error message if there is an invalid shape in the data set
 	                    System.out.println("Invalid shape type: " + shapeType);
 	                    break;
 	            } 
@@ -131,14 +148,19 @@ public class Sort {
             // Sort the shapes array based on the comparison type in descending order
             Comparator<GeometricShape> comparator = new GeometricShape.shapeComparator(comparisonType);
             
+            // Initializing variables 
             int firstIndex = 0;
             int lastIndex = shapes.length - 1;
             long startTime = 0, endTime = 0, elapsedTime = 0;
             
+            // Switch used to match and use the sorting algorithm the user specified 
             switch (sortingAlgo) {
             case 'b':
+                // Starts timer for testing
                 startTime = System.currentTimeMillis();
+                // Calls on the specified sorting method
                 Utility.bubbleSort(shapes, comparator.reversed());
+                // Ends timer for testing
                 endTime = System.currentTimeMillis();
                 break;
             case 's':
@@ -166,7 +188,7 @@ public class Sort {
                 Utility.shellSort(shapes, comparator.reversed());
                 endTime = System.currentTimeMillis();
                 break;
-                
+            // Display error if user enters invalid sorting method option
             default:
                 displayError("Invalid sorting algorithm.");
                 return;
@@ -176,6 +198,7 @@ public class Sort {
             elapsedTime = endTime - startTime;
             System.out.println("Time taken to sort using " + getSortingAlgorithmName(sortingAlgo) + ": " + elapsedTime + " milliseconds");
             
+            // Used to display the first and last shape in the data set
             if (firstIndex >= 0 && firstIndex < shapes.length && lastIndex >= 0 && lastIndex < shapes.length) {
                 GeometricShape firstShape = shapes[firstIndex];
                 GeometricShape lastShape = shapes[lastIndex];
@@ -186,7 +209,7 @@ public class Sort {
                 System.out.println("Invalid indices for first and last shapes.");
             }
             
-            // Print the sorted shapes
+            // Used to display every thousand shape in the data set
             for (int i = 0; i < shapes.length; i++) {
                 GeometricShape shape = shapes[i];
                 if (i % 1000 == 0) {
@@ -199,13 +222,13 @@ public class Sort {
         }
 	}
 	
-	//Method to display helpful messages for user when entering incorrect command line.
+	// Method to display helpful messages for user when entering incorrect command line.
 	private static void displayError(String message) {
 		System.out.println("Error: " + message);
 		System.out.println("Usage: java -jar sort.jar -f<filename> -t<v/h/s> -s<b/s/i/m/q/z>");
 	}
 	
-
+    // Method to display specified algorithm for timer
     private static String getSortingAlgorithmName(char sortingAlgo) {
         switch (sortingAlgo) {
             case 'b':

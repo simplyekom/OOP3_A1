@@ -4,17 +4,20 @@ import java.util.Comparator;
 
 public abstract class GeometricShape implements Comparable<GeometricShape> {
 
+		// Create abstract methods for subclasses 
 		public abstract double getHeight();
 		public abstract double getBaseArea();
 		public abstract double getVolume();
 		
+		// Initialize height 
 		protected double height;
 	
+		// Constructor
 		public GeometricShape(double height){
 			this.height = height;
 		}
 		
-		//Method to compare two shapes by their height
+		// Method to compare two shapes by their height
 		@Override
 		public int compareTo(GeometricShape other) {
 			if (this.height > other.height) {
@@ -25,11 +28,12 @@ public abstract class GeometricShape implements Comparable<GeometricShape> {
 				return 0;
 			}
 		}
-		
+
 		public static class shapeComparator implements Comparator<GeometricShape>{
 			
 			private final char compareType;
 			
+			// Set compareType from user input
 			public shapeComparator(char compareType) {
 				this.compareType = compareType;
 			}
