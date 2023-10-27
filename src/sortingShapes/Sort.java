@@ -17,7 +17,7 @@ public class Sort {
 
 	public static void main(String[] args) {
 		
-		String fileName = args[1];
+		String fileName = "";
 		char comparisonType = 'h'; //Default comparison type (height)
 		char sortingAlgo = 'b'; //Default sorting algorithm (bubble)
 		
